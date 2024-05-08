@@ -1,0 +1,15 @@
+depth:
+  type: None
+pose:
+  learn_pose: True
+dataloading:
+  path: data/Dark
+  scene: ['stove']
+  load_colmap_poses: False
+  customized_focal: False
+training:
+  out_dir:  out/Dark/stove
+  auto_scheduler: True
+  eval_pose_every: -1
+extract_images:
+  resolution: [384, 512]

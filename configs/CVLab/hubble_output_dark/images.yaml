@@ -1,0 +1,15 @@
+depth:
+  type: None
+pose:
+  learn_pose: True
+dataloading:
+  path: data/CVLab
+  scene: ['hubble_output_dark']
+  load_colmap_poses: False
+  customized_focal: True
+training:
+  out_dir:  out/CVLab/hubble_output_dark
+  auto_scheduler: True
+  eval_pose_every: -1
+extract_images:
+  resolution: [768, 768]

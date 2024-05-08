@@ -1,0 +1,15 @@
+depth:
+  type: None
+pose:
+  learn_pose: True
+dataloading:
+  path: data/CVLab
+  scene: ['SwissCube_cropped']
+  load_colmap_poses: False
+  customized_focal: False
+training:
+  out_dir:  out/CVLab/SwissCube_cropped_original
+  auto_scheduler: True
+  eval_pose_every: -1
+extract_images:
+  resolution: [768, 682]
