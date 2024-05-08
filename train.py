@@ -15,9 +15,10 @@ import model as mdl
 from utils_poses.comp_ate import compute_ATE, compute_rpe
 from model.common import backup,  mse2psnr
 from utils_poses.align_traj import align_ate_c2b_use_a2b
+
 def train(cfg):
     logger_py = logging.getLogger(__name__)
-
+    torch.cuda.empty_cache()
     # # Fix seeds
     np.random.seed(42)
     torch.manual_seed(42)

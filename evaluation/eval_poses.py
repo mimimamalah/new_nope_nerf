@@ -111,8 +111,3 @@ if args.vis:
     geometry_to_draw.append(line_set)
 
     o3d.visualization.draw_geometries(geometry_to_draw)
-
-
-
-
-

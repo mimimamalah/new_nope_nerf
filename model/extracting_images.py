@@ -52,8 +52,7 @@ class Extract_Images(object):
         p_loc, pixels = arange_pixels(resolution=(h, w))
 
         pixels = pixels.to(self.device)
-        
-
+               
         # redundancy, set depth_input values to ones to avoid masking
         depth_input = torch.zeros(1, 1, h, w).to(self.device)
         depth_input = get_tensor_values(depth_input, pixels.clone(), mode='nearest', scale=True, detach=False)
@@ -61,6 +60,7 @@ class Extract_Images(object):
         with torch.no_grad():
             rgb_pred = []
             depth_pred = []
+            alpha_pred = []
             for ii, (pixels_i, depth_i) in enumerate(zip(torch.split(pixels, self.points_batch_size, dim=1), torch.split(depth_input, self.points_batch_size, dim=1))):
                 out_dict = self.renderer(pixels_i, depth_i, camera_mat, world_mat, scale_mat, 
                 self.render_type, eval_=True, it=it, add_noise=False)
@@ -68,10 +68,18 @@ class Extract_Images(object):
                 rgb_pred.append(rgb_pred_i)
                 depth_pred_i = out_dict['depth_pred']
                 depth_pred.append(depth_pred_i)
+                alpha_pred_i = out_dict['alpha']
+                alpha_pred.append(alpha_pred_i)
             rgb_pred = torch.cat(rgb_pred, dim=1)
             rgb_pred = rgb_pred.view(h, w, 3).detach().cpu().numpy()
             depth_pred = torch.cat(depth_pred, dim=0)
             depth_pred = depth_pred.view(h, w).detach().cpu().numpy()
+            alpha_pred = torch.cat(alpha_pred, dim=0)
+            #print("Alpha pred shape after cat :" ,alpha_pred.shape)
+            print("self points batch size: ", self.points_batch_size)
+            alpha_pred = alpha_pred.view(h,w,128).detach().cpu().numpy()
+            #.view(h,w).detach().cpu().numpy()
+            #print("Alpha pred shape after view :" ,alpha_pred.shape)
 
             img_out = (rgb_pred * 255).astype(np.uint8)
             depth_out = depth_pred
@@ -117,8 +125,29 @@ class Extract_Images(object):
         imageio.imwrite(os.path.join(img_out_dir, str(img_idx).zfill(4) + '.png'), img_out)
         imageio.imwrite(os.path.join(depth_out_dir, str(img_idx).zfill(4) + '.png'), depth_out)
         
+        #res = 768                                                # 3D sampling resolution
+        #range = [0,1]                                       # 3D range of interest (assuming same for x,y,z)
+        #thres = 0.5                                              # volume density threshold for marching cubes
+        #chunk_size = self.points_batch_size #16384  
+        #t = torch.linspace(range,res+1) # the best range might vary from model to model
+        #query = torch.stack(torch.meshgrid(t,t,t),dim=-1)
+        #query_flat = query.view(-1,3)
+
+        #density_all = []
+        #for i in tqdm.trange(0,len(query_flat),chunk_size,leave=False):
+        #    points = query_flat[None,i:i+chunk_size]
+        #    ray_unit = torch.zeros_like(points) # dummy ray to comply with interface, not used
+        #    _,density_samples = self.renderer(points,ray_unit=ray_unit,mode=None)
+        #    density_all.append(density_samples.cpu())
+        #density_all = torch.cat(density_all,dim=1)[0]
+        #density_all = density_all.view(*query.shape[:-1]).numpy()
+        
 
         img_dict = {'img': img_out,
                     'depth': depth_out,
-                    'geo': geo_out}
-        return img_dict
+                    'geo': geo_out,
+                    'alpha': alpha_pred,
+                    'camera_mat': camera_mat,
+                    'world_mat': world_mat,
+                    'scale_mat': scale_mat}
+        return img_dict, img_idx

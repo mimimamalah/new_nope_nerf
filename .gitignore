@@ -7,3 +7,11 @@ run.sh
 third_party/
 out/
 arc.sh
+*.png
+*.jpeg
+*.npz
+*.ply
+*.pkl
+*.h5
+.ipynb_checkpoints/
+.vscode/

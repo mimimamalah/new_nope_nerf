@@ -54,8 +54,7 @@ class Renderer(nn.Module):
         camera_world = origin_to_world(
                 n_points, camera_mat, world_mat, scale_mat
             )
-        points_world = transform_to_world(pixels, depth, camera_mat, world_mat, scale_mat)
-        
+        points_world = transform_to_world(pixels, depth, camera_mat, world_mat, scale_mat)        
 
         d_i_gt = torch.norm(points_world - camera_world, p=2, dim=-1)
         
@@ -116,8 +115,16 @@ class Renderer(nn.Module):
         rgb_fg = torch.cat(rgb_fg, dim=0)
         logits_alpha_fg = torch.cat(logits_alpha_fg, dim=0)
         
+        #print("RGB Shape before reshape : ",rgb_fg.shape)
+        #print("Alpha Shape before reshape: ",logits_alpha_fg.shape)
+        
         rgb = rgb_fg.reshape(batch_size * n_points, full_steps, 3)
         alpha = logits_alpha_fg.view(batch_size * n_points, full_steps)
+        alpha_before_sigma = alpha.clone()
+        alpha_before_sigma = torch.relu(alpha_before_sigma)
+        alpha_before_sigma = 1 - torch.exp(-1.0 * alpha_before_sigma) 
+        #print("RGB Shape after reshape : ",rgb.shape)
+        #print("Alpha Shape after reshape: ",alpha.shape)
         
         if dist_alpha:
             t_vals = z_val.view(batch_size * n_points, full_steps)
@@ -145,7 +152,12 @@ class Renderer(nn.Module):
         if self.white_background:
             acc_map = torch.sum(weights, -1)
             rgb_values = rgb_values + (1. - acc_map.unsqueeze(-1))
-
+            
+        #print("RGB Shape : ",rgb_values.shape)
+        # Tried to do something similar to the rgb
+        #alpha = torch.sum(alpha.unsqueeze(-1) ,dim=-2)
+        #print("Alpha Shape : ",alpha.shape)
+        #print("RGB Shape after : ",rgb_values.reshape(batch_size, -1, 3).shape)
         d_i_gt =  d_i_gt[0] 
         if eval_ and normalise_ray:
             # print('-------normalising depth-------')
@@ -162,7 +174,7 @@ class Renderer(nn.Module):
             'normal': diff_norm,
             'depth_pred': dist_rendered_masked, # for loss
             'depth_gt': dist_dpt_masked,  # for loss
-            'alpha': alpha
+            'alpha': alpha_before_sigma, #.reshape(batch_size, -1, 1),
         }
         return out_dict
     def sample_ndc(self, camera_mat, camera_world, ray_vector, z_val, depth_range=[0., 1.]):
@@ -196,7 +208,6 @@ class Renderer(nn.Module):
         z_val = z_val.view(-1, full_steps, 1)
         return z_val, pts, ray_vector_fg
     
-
 
 
     def phong_renderer(self, pixels, camera_mat, world_mat, 

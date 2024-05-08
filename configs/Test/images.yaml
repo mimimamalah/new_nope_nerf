@@ -6,7 +6,7 @@ dataloading:
   path: data/Test
   scene: ['images']
   load_colmap_poses: False
-  customized_focal: True
+  customized_focal: False
 training:
   out_dir:  out/Test/images
   auto_scheduler: True

@@ -74,11 +74,13 @@ class OfficialStaticNerf(nn.Module):
         :return: rgb_density (H, W, N_sample, 4)
         """
         x, density = self.infer_occ(p)
+        #print("Density shape: ", density.shape)
+        #print("Density values: ", density)
+        density_inital = density.clone()
         if self.occ_activation=='softplus':
             density = F.softplus(density)
         else:
             density = density.relu()
-
         if not self.dist_alpha:
             density = 1 - torch.exp(-1.0 * density)
         if only_occupancy:

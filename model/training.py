@@ -1,3 +1,4 @@
+import math
 import os
 import torch
 import logging
@@ -10,6 +11,8 @@ from model.common import (
     get_tensor_values, 
      arange_pixels,  project_to_cam, transform_to_world,
 )
+from scipy.interpolate import interp1d
+
 logger_py = logging.getLogger(__name__)
 class Trainer(object):
     def __init__(self, model, optimizer, cfg, device=None, optimizer_pose=None, pose_param_net=None, 
@@ -129,7 +132,32 @@ class Trainer(object):
                 
             rgb_pred = torch.cat(rgb_pred, dim=1)
             depth_pred = torch.cat(depth_pred, dim=0)
-     
+            
+            # Print the shapes of rgb_pred and depth_pred
+            print("Shape of rgb_pred:", rgb_pred.shape)
+            print("Shape of depth_pred:", depth_pred.shape)
+            
+            # Target width from rgb_pred's shape
+            target_width = rgb_pred.shape[1]
+
+            # Move depth_pred to CPU and convert to NumPy array for interpolation
+            depth_pred_np = depth_pred.cpu().numpy()
+            
+            # Create an interpolation function
+            x_original = np.linspace(0, 1, len(depth_pred_np))
+            f = interp1d(x_original, depth_pred_np, kind='linear')
+
+            # Create new indices for the target width
+            x_new = np.linspace(0, 1, target_width)
+
+            # Perform interpolation
+            depth_pred_resized_np = f(x_new)
+
+            # Convert back to a PyTorch tensor
+            depth_pred = torch.from_numpy(depth_pred_resized_np)
+
+            print("Resized depth_pred shape:", depth_pred.shape)
+
             rgb_pred = rgb_pred.view(h, w, 3).detach().cpu().numpy()
             img_out = (rgb_pred * 255).astype(np.uint8)
             depth_pred_out = depth_pred.view(h, w).detach().cpu().numpy()
