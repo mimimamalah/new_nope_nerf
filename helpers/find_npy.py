@@ -1,9 +1,9 @@
 import numpy as np
+import os
 
-# Replace 'path_to_file.npy' with the actual path to your .npy file
-array = np.load('data/Tanks/Ignatius/poses_bounds.npy')
+# Replace with the actual path to your .npy file
+base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
+directory = os.path.join(base_path, 'Tanks/Ignatius/poses_bounds.npy')
+array = np.load(directory)
 
-print(array)
-
-            
-            
+print(array)            

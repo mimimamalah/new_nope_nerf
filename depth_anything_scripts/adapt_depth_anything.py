@@ -5,8 +5,8 @@ import imageio
 base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
 
 # Define paths relative to the base path
-input_dir = os.path.join(base_path, "CVLab/hubble_output_dark/dpt-anything")
-output_dir = os.path.join(base_path, "CVLab/hubble_output_dark/dpt")
+input_dir = os.path.join(base_path, "CVLab/hubble_output_complete/dpt-anything")
+output_dir = os.path.join(base_path, "CVLab/hubble_output_complete/dpt")
 
 os.makedirs(output_dir, exist_ok=True)
 

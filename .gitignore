@@ -15,3 +15,4 @@ arc.sh
 *.h5
 .ipynb_checkpoints/
 .vscode/
+old_files/

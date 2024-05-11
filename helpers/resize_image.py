@@ -24,8 +24,9 @@ def resize_image(image_path, new_width, new_height):
     return resized_image
 
 # Directory paths
-input_directory = 'data/CVLab/hubble_output/images'
-output_directory = 'data/CVLab/hubble_output_resized_paper/images'
+base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
+input_directory = os.path.join(base_path, 'CVLab/hubble_output/images')
+output_directory = os.path.join(base_path, 'CVLab/hubble_output_resized_paper/images')
 
 # Create the output directory if it doesn't exist
 os.makedirs(output_directory, exist_ok=True)

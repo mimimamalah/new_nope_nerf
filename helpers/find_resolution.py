@@ -1,4 +1,7 @@
 import cv2
+import os
+
+base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
 
 def get_image_dimensions(image_path):
     """
@@ -22,16 +25,16 @@ def get_image_dimensions(image_path):
 
 # Define image paths
 image_paths = {
-    'swisscube': 'data/Dark/stove/images/IMG_4571.JPG',
-    'swisscube_depth': 'data/Dark/stove/dpt/IMG_4571.png',
-    'ignatius': 'data/Tanks/Ignatius/images/000741.jpg',
-    'ignatius_depth': 'data/Tanks/Ignatius/dpt/000741.png',
-    'hubble_image': 'data/CVLab/hubble_output/images/0000.png',
-    'hubble_depth': 'data/CVLab/hubble_output/dpt/0000_depth.png',
-    'hubble_resized_image': 'data/CVLab/hubble_output_resized/images/0000.png',
-    'hubble_resized_depth': 'data/CVLab/hubble_output_resized/dpt/0000.png',
-    'hubble_resized_image_paper': 'data/CVLab/hubble_output_resized_paper/images/0000.png',
-    'hubble_resized_depth_paper': 'data/CVLab/hubble_output_resized_paper/dpt/0000_shaded.png',
+    'swisscube': os.path.join(base_path, 'Dark/stove/images/IMG_4571.JPG'),
+    'swisscube_depth': os.path.join(base_path,'Dark/stove/dpt/IMG_4571.png'),
+    'ignatius': os.path.join(base_path,'Tanks/Ignatius/images/000741.jpg'),
+    'ignatius_depth': os.path.join(base_path,'Tanks/Ignatius/dpt/000741.png'),
+    'hubble_image': os.path.join(base_path,'CVLab/hubble_output/images/0000.png'),
+    'hubble_depth': os.path.join(base_path,'CVLab/hubble_output/dpt/0000_depth.png'),
+    'hubble_resized_image': os.path.join(base_path,'CVLab/hubble_output_resized/images/0000.png'),
+    'hubble_resized_depth': os.path.join(base_path,'CVLab/hubble_output_resized/dpt/0000.png'),
+    'hubble_resized_image_paper': os.path.join(base_path,'CVLab/hubble_output_resized_paper/images/0000.png'),
+    'hubble_resized_depth_paper': os.path.join(base_path,'CVLab/hubble_output_resized_paper/dpt/0000_shaded.png'),
 }
 
 # Get and print dimensions for each image

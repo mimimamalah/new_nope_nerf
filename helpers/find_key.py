@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 def inspect_npz_file(npz_file_path):
     # Load the NPZ file
@@ -22,15 +23,19 @@ def inspect_npz_file(npz_file_path):
             print("\n  Specific key 'pred': Shape:", npz_file['pred'].shape)
             print("  Contents:", npz_file['pred'] if npz_file['pred'].size <= 100 else "Large array, contents not fully printed")
 
+
+base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
+
 # Paths to NPZ files you want to inspect
 npz_file_paths = [
-    "data/CVLab/hubble_output_resized/dpt/depth_0000.npz",
-    "data/CVLab/hubble_output_resized_paper/dpt/depth_0000.npz",
-    "data/CVLab/hubble_output_resized/dpt/depth_0145.npz",
-    "data/CVLab/hubble_output_resized_paper/dpt/depth_0145.npz",
+    os.path.join(base_path, "CVLab/hubble_output_complete/dpt/depth_0000.npz"),
+    os.path.join(base_path, "CVLab/hubble_output_resized_paper/dpt/depth_0000.npz"),
+    os.path.join(base_path, "CVLab/hubble_output_complete/dpt/depth_0145.npz"),
+    os.path.join(base_path, "CVLab/hubble_output_resized_paper/dpt/depth_0145.npz"),
 ]
 
 # Inspect each NPZ file in the list
 for path in npz_file_paths:
+    print(path)
     inspect_npz_file(path)
     print("-" * 60)  # Separator for readability
