@@ -4,11 +4,11 @@ pose:
   learn_pose: True
 dataloading:
   path: data/Dark
-  scene: ['stove']
+  scene: ['stove-anything']
   load_colmap_poses: True
   customized_focal: False
 training:
-  out_dir:  out/Dark/stove
+  out_dir:  out/Dark/stove-anything
   auto_scheduler: True
   eval_pose_every: -1
 extract_images:

@@ -437,7 +437,7 @@ scale_mats = []
 densities = []
 output_geo = True
 
-output_mesh = True  # Set this flag to True to output meshes
+output_mesh = False  # Set this flag to True to output meshes
 mesh_dir = os.path.join(render_dir, 'meshes')
 os.makedirs(mesh_dir, exist_ok=True)
 i = 0
@@ -446,7 +446,7 @@ volume_size = (768, 768, 768)
 volume = np.zeros(volume_size, dtype=np.float32)
 
 for data in train_loader:
-    if i < 10 :
+    #if i < 10 :
         #print("Data : ", data)
         #print("Data rendered_dir : ", render_dir)
         #print("Data c2ws : ", c2ws)
@@ -461,8 +461,8 @@ for data in train_loader:
         camera_mats.append(out['camera_mat'])
         world_mats.append(out['world_mat'])
         scale_mats.append(out['scale_mat'])
-        print("world_mats shape" , out['world_mat'].shape)
-        print("world_mats values" , out['world_mat'])
+        #print("world_mats shape" , out['world_mat'].shape)
+        #print("world_mats values" , out['world_mat'])
         #print("camera_mats shape" , out['camera_mat'].shape)
         #print("camera_mats values" , out['camera_mat'])
         #print("scale_mats shape" , out['scale_mat'].shape)
@@ -549,11 +549,11 @@ for data in train_loader:
             #hollow_mesh.export(hollow_mesh_file)
                 
                      
-    i+=1
+   #i+=1
 
-world_mats_tensor = torch.stack([mat.squeeze(0) for mat in world_mats])
-camera_mats_tensor = torch.stack([mat.squeeze(0) for mat in camera_mats])
-scale_mats_tensor = torch.stack([mat.squeeze(0) for mat in scale_mats])
+#world_mats_tensor = torch.stack([mat.squeeze(0) for mat in world_mats])
+#camera_mats_tensor = torch.stack([mat.squeeze(0) for mat in camera_mats])
+#scale_mats_tensor = torch.stack([mat.squeeze(0) for mat in scale_mats])
 #inverse_world_mats = torch.inverse(world_mats_tensor)
 
 # Applying transformations to each alpha_pred
@@ -563,37 +563,37 @@ scale_mats_tensor = torch.stack([mat.squeeze(0) for mat in scale_mats])
 
 #average_density = torch.mean(stacked_densities, dim=0)
 
-for density_map, world_mat, camera_mat, scale_mat in zip(densities, world_mats, camera_mats, scale_mats):
+#for density_map, world_mat, camera_mat, scale_mat in zip(densities, world_mats, camera_mats, scale_mats):
     # Assume densities and volume are numpy arrays and view_matrix is a 4x4 numpy array
-    transformed_density = resample_density(density_map, world_mat, camera_mat, scale_mat, volume_size)
-    volume += transformed_density  
+#    transformed_density = resample_density(density_map, world_mat, camera_mat, scale_mat, volume_size)
+#    volume += transformed_density  
     
 
 #normalize_volume(volume)
-pivot_value = 0.002
+#pivot_value = 0.002
 # Define the isovalue for the marching cubes
-isovalue = 0.002
+#isovalue = 0.002
 # Assuming 'volume' is your volume data and is properly set up
 # This function call will return the mesh for the specified subvolume with inverted data
 #full_density = np.concatenate(densities, axis=2)
-inverted_mesh = invert_and_extract_mesh(volume, isovalue, pivot_value)   
-mesh_file_inverted = os.path.join(mesh_dir, f"mesh_total_inverted.ply")
-inverted_mesh.export(mesh_file_inverted)
+#inverted_mesh = invert_and_extract_mesh(volume, isovalue, pivot_value)   
+#mesh_file_inverted = os.path.join(mesh_dir, f"mesh_total_inverted.ply")
+#inverted_mesh.export(mesh_file_inverted)
     
 #print("Same alphas or not", alpha[0] == alpha[1])
     
         
-#imgs = np.stack(imgs, axis=0)
-#depths = np.stack(depths, axis=0)
+imgs = np.stack(imgs, axis=0)
+depths = np.stack(depths, axis=0)
 
-#video_out_dir = os.path.join(render_dir, 'video_out')
-#if not os.path.exists(video_out_dir):
-#    os.makedirs(video_out_dir)
-#imageio.mimwrite(os.path.join(video_out_dir, 'img.mp4'), imgs, fps=30, quality=9)
-#imageio.mimwrite(os.path.join(video_out_dir, 'depth.mp4'), depths, fps=30, quality=9)
-#if output_geo:  
-#    geos = np.stack(geos, axis=0)
-#    imageio.mimwrite(os.path.join(video_out_dir, 'geo.mp4'), geos, fps=30, quality=9)
+video_out_dir = os.path.join(render_dir, 'video_out')
+if not os.path.exists(video_out_dir):
+    os.makedirs(video_out_dir)
+imageio.mimwrite(os.path.join(video_out_dir, 'img.mp4'), imgs, fps=30, quality=9)
+imageio.mimwrite(os.path.join(video_out_dir, 'depth.mp4'), depths, fps=30, quality=9)
+if output_geo:  
+    geos = np.stack(geos, axis=0)
+    imageio.mimwrite(os.path.join(video_out_dir, 'geo.mp4'), geos, fps=30, quality=9)
 
 
        

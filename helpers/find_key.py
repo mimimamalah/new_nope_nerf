@@ -28,10 +28,9 @@ base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
 
 # Paths to NPZ files you want to inspect
 npz_file_paths = [
-    os.path.join(base_path, "CVLab/hubble_output_complete/dpt/depth_0000.npz"),
-    os.path.join(base_path, "CVLab/hubble_output_resized_paper/dpt/depth_0000.npz"),
-    os.path.join(base_path, "CVLab/hubble_output_complete/dpt/depth_0145.npz"),
-    os.path.join(base_path, "CVLab/hubble_output_resized_paper/dpt/depth_0145.npz"),
+    os.path.join(base_path, "CVLab/hubble_output_resized_paper/intrinsics.npz"),
+    #os.path.join(base_path, "CVLab/hubble_output_complete/dpt/depth_0145.npz"),
+    #os.path.join(base_path, "CVLab/hubble_output_resized_paper/dpt/depth_0145.npz"),
 ]
 
 # Inspect each NPZ file in the list

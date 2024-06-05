@@ -4,11 +4,11 @@ pose:
   learn_pose: True
 dataloading:
   path: data/CVLab
-  scene: ['hubble_output_dark']
+  scene: ['hubble_output_quarter']
   load_colmap_poses: False
   customized_focal: True
 training:
-  out_dir:  out/CVLab/hubble_output_dark_correct
+  out_dir:  out/CVLab/hubble_output_quarter_correct
   auto_scheduler: True
   eval_pose_every: -1
 extract_images:

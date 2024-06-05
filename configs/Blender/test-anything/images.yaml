@@ -3,13 +3,13 @@ depth:
 pose:
   learn_pose: True
 dataloading:
-  path: data/CVLab
-  scene: ['hubble_output_dark']
+  path: data/Blender
+  scene: ['test-anything']
   load_colmap_poses: False
-  customized_focal: True
+  customized_focal: False
 training:
-  out_dir:  out/CVLab/hubble_output_dark_correct
+  out_dir:  out/Blender/test-anything
   auto_scheduler: True
   eval_pose_every: -1
 extract_images:
-  resolution: [768, 768]
+  resolution: [384, 384]

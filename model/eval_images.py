@@ -9,6 +9,7 @@ import imageio
 from model.common import mse2psnr
 from third_party import pytorch_ssim
 from skimage import metrics
+import torchvision.transforms as T
 from model.common import (
     get_tensor_values,  arange_pixels
 )
@@ -88,6 +89,18 @@ class Eval_Images(object):
             
 
         # mse for the entire image
+        # Since we modified the image size for the Dark Stove dataset, we need to resize the image to the original size
+        
+        # Check the size and order of dimensions for img_out, assuming it is [channels, height, width]
+        print("Output image size: ", img_out.size())  # Expected format: [C, H, W]
+
+        #Resize img_gt to match img_out size
+        if img_gt.size(1) != img_out.size(1) or img_gt.size(2) != img_out.size(2):  # Correctly checking dimensions
+            resize_transform = T.Resize((img_out.size(1), img_out.size(2)))  # Resize expects (height, width)
+            img_gt_resized = resize_transform(img_gt)
+            img_gt = img_gt_resized
+        
+        # Calculate the MSE loss
         mse = F.mse_loss(img_out, img_gt).item()
         psnr = mse2psnr(mse)
         ssim = pytorch_ssim.ssim(img_out.permute(2, 0, 1).unsqueeze(0), img_gt.permute(2, 0, 1).unsqueeze(0)).item()

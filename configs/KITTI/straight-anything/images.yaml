@@ -1,0 +1,16 @@
+depth:
+  type: None
+pose:
+  learn_pose: True
+dataloading:
+  path: data/KITTI
+  scene: ['straight-anything']
+  customized_focal: true
+  customized_poses: false
+  load_colmap_poses: true
+  random_ref: 1
+training:
+  auto_scheduler: True
+  out_dir: out/KITTI/straight-anything
+extract_images:
+  resolution: [188, 621]

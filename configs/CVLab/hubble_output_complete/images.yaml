@@ -8,7 +8,7 @@ dataloading:
   load_colmap_poses: False
   customized_focal: True
 training:
-  out_dir:  out/CVLab/hubble_output_complete
+  out_dir:  out/CVLab/hubble_output_correct
   auto_scheduler: True
   eval_pose_every: -1
 extract_images:

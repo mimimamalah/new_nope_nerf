@@ -1,15 +1,22 @@
 import os
+import argparse
+import yaml
 import numpy as np
 import imageio
 
-base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
-
-# Define paths relative to the base path
-input_dir = os.path.join(base_path, "CVLab/hubble_output_complete/dpt-anything")
-output_dir = os.path.join(base_path, "CVLab/hubble_output_complete/dpt")
-
-os.makedirs(output_dir, exist_ok=True)
-
+def load_config(config_path):
+    """
+    Load the configuration from a YAML file.
+    
+    Parameters:
+        config_path (str): Path to the configuration file.
+    
+    Returns:
+        dict: Configuration dictionary.
+    """
+    with open(config_path, 'r') as file:
+        return yaml.safe_load(file)
+    
 def read_scale_and_shift(file_path):
     with open(file_path, 'r') as f:
         lines = f.readlines()
@@ -28,8 +35,30 @@ def inverse_depth_transformation(depth):
     depth[depth < 1e-8] = 1e-8
     transformed_depth = 1.0 / depth
     return transformed_depth
-    
-scale_shift_file = os.path.join(os.path.dirname(__file__), 'scale_and_shift.txt')
+
+parser = argparse.ArgumentParser(description="Process and transform images based on configuration.")
+parser.add_argument("config", type=str, help="Path to configuration file.")
+args = parser.parse_args()
+
+cfg = load_config(args.config)
+
+if 'dataloading' not in cfg:
+    raise ValueError("Configuration file is missing the 'dataloading' section.")
+
+base_path = os.path.join(os.path.dirname(__file__), '..', cfg['dataloading']['path'])
+scene_name = cfg['dataloading']['scene'][0] 
+
+input_dir = os.path.join(base_path, scene_name, "dpt-anything")
+output_dir = os.path.join(base_path, scene_name, "dpt")
+
+os.makedirs(output_dir, exist_ok=True)
+
+#print("Input dir : " ,input_dir)
+#print("Output dir : " ,output_dir)
+
+base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
+
+scale_shift_file = os.path.join(os.path.dirname(__file__), 'Ignatius-before-inversing/scale_and_shift.txt')
 scale, shift = read_scale_and_shift(scale_shift_file)
 print(f"Scale: {scale}, Shift: {shift}")
 
