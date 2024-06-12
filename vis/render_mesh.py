@@ -24,6 +24,14 @@ import scipy.ndimage
 import tqdm
 from plyfile import PlyData, PlyElement
 
+"""
+This script extracts corresponding 3D meshes from the NOPE-NeRF model,
+utilizing density data to create mesh representations.
+Note: Adjust the 'thres', 'bounds_x' (y,z) , and resolution 'res_x' parameters 
+according to your specific dataset and accuracy requirements.
+"""
+
+
 def export_point_cloud_ply(density_data, threshold, output_file='point_cloud.ply'):
     # Extract points where the density is greater than the threshold
     z, y, x = np.where(density_data > threshold)
@@ -103,8 +111,8 @@ black_threshold = torch.tensor([0, 0, 0], device=device)  # RGB black threshold
 sphere_radius = 15 
 high_coverage_threshold = 1.0
 #For Ignatius
-#thres = 0.6                                              # volume density threshold for marching cubes
-thres = 0.1 
+thres = 0.6                                              # volume density threshold for marching cubes
+#thres = 0.1 
 chunk_size = 1024*32  
 
 #with torch.cuda.device(device), torch.no_grad():
@@ -181,8 +189,8 @@ with torch.cuda.device(device), torch.no_grad():
     
     #density_all = 1.0 - density_all
     #For Ignatius    
-    #density_threshold = 0.6
-    density_threshold = 0.1
+    density_threshold = 0.6
+    #density_threshold = 0.1
     obj_fname = f"{mesh_dir}/high_density_points_0.9_2.ply" 
     export_point_cloud_ply(density_all, density_threshold, output_file=obj_fname)
 

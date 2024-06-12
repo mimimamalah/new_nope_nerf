@@ -4,6 +4,12 @@ import imageio
 import torch
 import torch.nn.functional as F
 
+"""
+This script calculates the appropriate scale and shift parameters to adapt the depth values 
+from DPT models for compatibility with the NOPE-NeRF model requirements.
+"""
+
+
 # Function to find scale and shift parameters
 def find_scale_and_shift(tensor1, tensor2):
     A = np.vstack([tensor1, np.ones(len(tensor1))]).T
@@ -27,7 +33,7 @@ def inverse_depth_transformation(depth):
     return depth
 
 depth_anything_dir = "data/KITTI/straight-anything-scale-original/dpt-anything"
-depth_original_dir = "data/KITTI/straight/dpt-inverse"
+depth_original_dir = "data/KITTI/straight/dpt-before"
 transformed_dir = "depth_anything_scripts/KITTI-final-between-dpt-inverse-anything"
 
 if not os.path.exists(transformed_dir):

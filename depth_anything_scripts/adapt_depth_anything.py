@@ -4,6 +4,12 @@ import yaml
 import numpy as np
 import imageio
 
+"""
+This class processes depth images by applying scaling and shifting transformations 
+and adapts them to the expected input range of the NOPE-NeRF model.
+"""
+
+
 def load_config(config_path):
     """
     Load the configuration from a YAML file.
@@ -59,7 +65,7 @@ os.makedirs(output_dir, exist_ok=True)
 
 base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
 
-scale_shift_file = os.path.join(os.path.dirname(__file__), 'hubble-final-between-no-focal-incorrect/scale_and_shift.txt')
+scale_shift_file = os.path.join(os.path.dirname(__file__), 'Ignatius-before-inversing/scale_and_shift.txt')
 scale, shift = read_scale_and_shift(scale_shift_file)
 print(f"Scale: {scale}, Shift: {shift}")
 
