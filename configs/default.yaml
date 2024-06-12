@@ -28,7 +28,6 @@ dataloading:
   load_colmap_poses: True
   shuffle: True
   sample_rate: 8
-
 rendering:
   type: nope_nerf # changed
   n_max_network_queries: 64000
@@ -50,6 +49,7 @@ depth:
   shift: 0.1378
   invert: True
   freeze: True
+  folder_name: ''
 pose:
   learn_pose: True
   learn_R: True

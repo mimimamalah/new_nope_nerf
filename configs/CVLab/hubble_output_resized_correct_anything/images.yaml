@@ -4,11 +4,11 @@ pose:
   learn_pose: True
 dataloading:
   path: data/CVLab
-  scene: ['hubble_output_resized']
-  load_colmap_poses: True
+  scene: ['hubble_output_resized_correct_anything']
+  load_colmap_poses: False
   customized_focal: True
 training:
-  out_dir:  out/CVLab/hubble_output_resized
+  out_dir:  out/CVLab/hubble_output_correct_anything
   auto_scheduler: True
   eval_pose_every: -1
 extract_images:

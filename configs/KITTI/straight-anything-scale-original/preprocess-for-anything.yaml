@@ -1,0 +1,12 @@
+depth:
+  type: DPT
+  folder_name: 'dpt-before'
+  invert: False
+dataloading:
+  customized_focal: true
+  customized_poses: false
+  load_colmap_poses: true
+  path: data/KITTI
+  scene: ['straight-anything-scale-original']
+training:
+  mode: 'all'

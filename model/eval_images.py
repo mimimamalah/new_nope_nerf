@@ -96,9 +96,21 @@ class Eval_Images(object):
 
         #Resize img_gt to match img_out size
         if img_gt.size(1) != img_out.size(1) or img_gt.size(2) != img_out.size(2):  # Correctly checking dimensions
-            resize_transform = T.Resize((img_out.size(1), img_out.size(2)))  # Resize expects (height, width)
-            img_gt_resized = resize_transform(img_gt)
-            img_gt = img_gt_resized
+                # Assuming img_out and img_gt are initially in [H, W, C]
+                # Convert from [H, W, C] to [C, H, W] for PyTorch operations
+                img_out_chw = img_out.permute(2, 0, 1)  # Change to [C, H, W]
+                img_gt_chw = img_gt.permute(2, 0, 1)    # Change to [C, H, W]
+
+                # Resize img_gt to match the size of img_out using interpolate
+                img_gt_resized_chw = F.interpolate(img_gt_chw.unsqueeze(0), 
+                                                size=(img_out_chw.size(1), img_out_chw.size(2)), 
+                                                mode='bilinear', 
+                                                align_corners=False).squeeze(0)
+
+                # Convert resized img_gt back to [H, W, C]
+                img_gt_resized = img_gt_resized_chw.permute(1, 2, 0)  # Change back to [H, W, C]
+
+                img_gt = img_gt_resized
         
         # Calculate the MSE loss
         mse = F.mse_loss(img_out, img_gt).item()

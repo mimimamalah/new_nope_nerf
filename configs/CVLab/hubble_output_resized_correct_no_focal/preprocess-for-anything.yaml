@@ -1,11 +1,12 @@
 depth:
   type: DPT
-#  folder_name: 'dpt-not-inversed'
-#  invert: False
+  folder_name: 'dpt-before'
+  invert: False
 dataloading:
   path: data/CVLab
   scene: ['hubble_output_resized_correct_no_focal']
   resize_factor: 
   load_colmap_poses: False
+  customized_focal: False
 training:
   mode: 'all'

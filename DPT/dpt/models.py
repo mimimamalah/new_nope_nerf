@@ -202,8 +202,7 @@ class DPTDepthModel(DPT):
 
     def forward(self, x):
         inv_depth = super().forward(x).squeeze(dim=1)
-        # You need to comment this part out if you want to use the original DPT depth before scale, shifting and inversing.
-        #"""
+        # You need to have invert equals False if you want to use the original DPT depth before scale, shifting and inversing.
         if self.invert:
             depth = self.scale * inv_depth + self.shift
             depth[depth < 1e-8] = 1e-8
@@ -211,8 +210,6 @@ class DPTDepthModel(DPT):
             return depth
         else:
             return inv_depth
-        #"""
-        return inv_depth
 
 # class LitDPTModule(LightningModule):
 

@@ -1,44 +1,74 @@
-# NoPe-NeRF: Optimising Neural Radiance Field with No Pose Prior
+# UNKNOWN OBJECT EXTRACTION FROM MULTI-VIEW IMAGES ON SYNTHETIC IMAGES WITH NO POSE PRIOR
 
-**[Project Page](https://nope-nerf.active.vision/) | [Arxiv](https://arxiv.org/abs/2212.07388) | [Data](https://www.robots.ox.ac.uk/~wenjing/Tanks.zip) | [Pretrained Model](https://www.robots.ox.ac.uk/~wenjing/pretrained_Tanks.zip)**
-
-Wenjing Bian, 
-Zirui Wang, 
-[Kejie Li](https://likojack.github.io/kejieli/#/home), 
-[Jiawag Bian](https://jwbian.net/),
-[Victor Adrian Prisacariu](http://www.robots.ox.ac.uk/~victor/). (CVPR 2023 highlight)
-
-Active Vision Lab, University of Oxford.
-
+**[Data]() | [PDF]() | [Pretrained Models]()**
 
 ## Table of Content
-- [Installation](#Installation)
-- [Data](#Data)
-- [Usage](#Usage)
-- [Acknowledgement](#Acknowledgement)
-- [Citation](#citation)
+- [UNKNOWN OBJECT EXTRACTION FROM MULTI-VIEW IMAGES ON SYNTHETIC IMAGES WITH NO POSE PRIOR](#unknown-object-extraction-from-multi-view-images-on-synthetic-images-with-no-pose-prior)
+	- [Table of Content](#table-of-content)
+	- [Overview](#overview)
+	- [Installation](#installation)
+	- [Data](#data)
+	- [Monocular Depth Estimation](#monocular-depth-estimation)
+	- [Training](#training)
+	- [Evaluation](#evaluation)
+	- [More Visualisations](#more-visualisations)
+	- [Acknowledgement](#acknowledgement)
+
+
+## Overview
+This is the codebase for my semester project.
+We aim extract mesh surface from satellite images by addressing challenges encountered with the Neural Radiance Fields (NeRF) approach, particularly under the NoPe-NeRF configuration, which solely uses images without additional parameters. Tests using different datasets revealed that NoPe-NeRF underperforms with non- consecutive images, low-light, and low-texture conditions, as well as with synthetic data. To overcome these limitations, we used a novel monocular depth estimation method that replaces the traditional Depth Prediction Transformer (DPT) with our Depth-Anything model. This adaptation significantly boosts performance in challenging scenarios, evidenced by improved pose metrics and Peak Signal-to- Noise Ratio (PSNR), though it shows minimal impact on high- texture real-world datasets. Additionally, we explored the reconstruction of mesh surfaces. Our findings demonstrate that the combined use of NoPe-NeRF and Depth-Anything models substantially enhances the accuracy and feasibility of 3D reconstructions.
+My implementation is built on top of [NoPe-NeRF: Optimising Neural Radiance Field with No Pose Prior](https://github.com/ActiveVisionLab/nope-nerf/).
 
 ## Installation
 
+Using Scitas
+
+Need to connect first using EPFL VPN :
 ```
-git clone https://github.com/ActiveVisionLab/nope-nerf.git
+ssh −X username@izar.epfl.ch
+```
+
+```
+git clone https://github.com/mimimamalah/new_nope_nerf.git
+cd nope-nerf
+python −m venv nope_nerf_env source nope_nerf_env
+source nope_nerf_env/bin/activate
+source env.sh
+pip install -r requirement.txt
+```
+
+Using Cuda :
+```
+git clone https://github.com/mimimamalah/new_nope_nerf.git
 cd nope-nerf
 conda env create -f environment.yaml
 conda activate nope-nerf
+pip install -r requirement.txt
 ```
 
-## Data and Preprocessing
-1. [Tanks and Temples](https://www.robots.ox.ac.uk/~wenjing/Tanks.zip):
-Our pre-processed Tanks and Temples data contains the 8 scenes shown in the paper. Each scene contains images, monocular depth estimations from DPT and COLMAP poses. You can download and unzip it to `data` directory.
+## Data
+1. [Ignatius Dataset]():
+We used on the Ignatius dataset
 
-2. [NeRF LLFF](https://drive.google.com/drive/folders/128yBriW1IG_3NJ5Rp7APSTZsJqdJdfc1):
-We also provide config file for NeRF LLFF dataset. You can download the dataset and unzip it to `data` directory. One example of the config file is `configs/LLFF/fern.yaml`. 
+2. [Stove Dataset]():
+
+3. [Hot-Dog Dataset]():
+
+4. [V-KITTI]():
+
+5. [Hubble Dataset]():
+
+6. If you want to use your own image sequence with customised camera intrinsics, you need to add an `data/your_folder/your_scene/intrinsics.npz` file to the scene directory. One example of the config file is `configs/your_folder/your_scene/images.yaml` (please add your own data to the `data/your_folder/your_scene/images` directory). 
 
 
-3. If you want to use your own image sequence with customised camera intrinsics, you need to add an `intrinsics.npz` file to the scene directory. One example of the config file is `configs/Test/images.yaml` (please add your own data to the `data/Test/images` directory). 
+## Monocular Depth Estimation
+If you want to use Depth-Anything
 
 
 
+
+If you want to use the original DPT 
 Monocular depth map generation: you can first download the pre-trained DPT model from [this link](https://drive.google.com/file/d/1dgcJEYYw1F8qirXhZxgNK8dWWz_8gZBD/view?usp=sharing) provided by [Vision Transformers for Dense Prediction](https://github.com/isl-org/DPT) to `DPT` directory, then run
 ```
 python preprocess/dpt_depth.py configs/preprocess.yaml
@@ -84,18 +114,7 @@ Pose visualisation (estimated trajectory only)
 python vis/vis_poses.py configs/Tanks/Ignatius.yaml
 ```
 
-
 ## Acknowledgement
-We thank [Theo Costain](https://www.robots.ox.ac.uk/~costain/) and Michael Hobley for helpful comments and proofreading. We thank Shuai Chen and Xinghui Li for insightful discussions. Wenjing Bian is supported by China Scholarship Council (CSC).
- 
-We refer to [NeRFmm](https://github.com/ActiveVisionLab/nerfmm), [UNISURF](https://github.com/autonomousvision/unisurf), [Vision Transformers for Dense Prediction](https://github.com/isl-org/DPT), [kitti-odom-eval](https://github.com/Huangying-Zhan/kitti-odom-eval) and [nerf-pytorch](https://github.com/yenchenlin/nerf-pytorch). We thank the excellent code they provide.
+We thank Wenjing Bian et. al for their excellent open-source implementation of [NoPe-NeRF](https://github.com/ActiveVisionLab/nope-nerf/) 
 
-## Citation
-```
- @inproceedings{bian2022nopenerf,
-	author    = {Wenjing Bian and Zirui Wang and Kejie Li and Jiawang Bian and Victor Adrian Prisacariu},
-	title     = {NoPe-NeRF: Optimising Neural Radiance Field with No Pose Prior},
-	journal   = {CVPR},
-	year      = {2023}
-	}
-```
+from which we based much of our work on.

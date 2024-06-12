@@ -57,5 +57,7 @@ if __name__=='__main__':
         folder_name= 'dpt_' + str(cfg['dataloading']['crop_size'])
     else:
         folder_name = 'dpt'
+    if cfg['depth']['folder_name'] != '':
+        folder_name = cfg['depth']['folder_name']
     depth_save_dir = os.path.join(cfg['dataloading']['path'], cfg['dataloading']['scene'][0], folder_name)
     dpt_depth(cfg, depth_save_dir)

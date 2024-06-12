@@ -1,2 +1,2 @@
-Global Scale: 5.963375279889947
-Global Shift: 215.02407633879156
+Scale: 99.9
+Shift: 0.1
