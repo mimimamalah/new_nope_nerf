@@ -39,6 +39,22 @@ source env.sh
 pip install -r requirement.txt
 ```
 
+To synchronize the directory dir from SCITAS to your computer: 
+```
+rsync -azP username@izar.epfl.ch:dir/ dir
+```
+
+From your computer to SCITAS :
+```
+rsync -azP dir/ username@izar.epfl.ch:dir
+```
+
+There are compatibility issues with SCITAS, so it's advisable to contact them to ensure there are no conflicts. You should only load modules that are already installed. You can find modules using:
+```
+module spider elem
+module load elem
+```
+
 ## Data
 1. [Ignatius Dataset](https://drive.google.com/drive/folders/15GMJsi0Bo4jcMkBPGJG2PoJVuKUUzxVA?usp=share_link):
    We used the Ignatius dataset for a real-world, high texture, good lighting and consecutive cataset.
@@ -72,8 +88,8 @@ Don't forget to customise this command with your own folder name and scene name.
 
 cd ~/new_depth_anything/
 
-python run.py --encoder vitl --img-path ../nope-nerf/data/your_folder/your_scene\
-//images --outdir ../nope-nerf/data/your_folder/your_scene\
+python run.py --encoder vitl --img-path ../new_nope_nerf/data/your_folder/your_scene\
+//images --outdir ../new_nope_nerf/data/your_folder/your_scene\
 //dpt-anything --pred-only
 
 ```
@@ -136,7 +152,7 @@ An example of my corresponding batch script on SCITAS :
 
 ```
 #!/bin/bash                                                                     
-#SBATCH --chdir /home/malahlou                                                  
+#SBATCH --chdir /home/username                                                  
 #SBATCH --partition=gpu                                                         
 #SBATCH --qos=gpu                                                               
 #SBATCH --gres=gpu:1                                                            
@@ -150,7 +166,7 @@ echo STARTED  at `date`
 
 cd ~/new_nope_nerf/
 
-python train.py configs/KITTI/straight/images.yaml
+python train.py configs/your_folder/your_scene/images.yaml
 
 echo FINISHED at date
 ```
